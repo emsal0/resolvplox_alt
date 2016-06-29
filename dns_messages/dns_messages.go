@@ -13,7 +13,7 @@ type Message struct {
 	additional []byte
 }
 
-func NametoQuery(name []byte) ([]byte, []byte) {
+func NametoQuery(name []byte) ([]byte, Message) {
 	src := rand.NewSource(time.Now().UnixNano())
 	gen := rand.New(src)
 
@@ -42,7 +42,12 @@ func NametoQuery(name []byte) ([]byte, []byte) {
 
 	qlength := uint8(len(name))
 
-	message := append(append(header, qlength), name...)
+	message := Message{
+		head:       header,
+		question:   append(append([]byte{}, qlength), name...),
+		answers:    []byte{},
+		authority:  []byte{},
+		additional: []byte{}}
 
 	return id, message
 }
