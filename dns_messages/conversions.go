@@ -5,14 +5,6 @@ import (
 	"time"
 )
 
-type Message struct {
-	head       []byte
-	question   []byte
-	answers    []byte
-	authority  []byte
-	additional []byte
-}
-
 func NametoQuery(name []byte) ([]byte, Message) {
 	src := rand.NewSource(time.Now().UnixNano())
 	gen := rand.New(src)
