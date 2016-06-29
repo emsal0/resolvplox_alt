@@ -1,6 +1,7 @@
 package dns_messages
 
 import (
+	"bytes"
 	"math/rand"
 	"time"
 )
@@ -8,11 +9,9 @@ import (
 func NametoQuery(name []byte) (id []byte, msg Message) {
 	id, header := generateQueryHeader()
 
-	qlength := uint8(len(name))
-
 	message := Message{
 		head:       header,
-		question:   append(append([]byte{}, qlength), name...),
+		question:   generateQuery(name),
 		answers:    []byte{},
 		authority:  []byte{},
 		additional: []byte{},
@@ -28,11 +27,11 @@ func generateQueryHeader() (id []byte, header []byte) {
 	id = make([]byte, 2)
 	gen.Read(id)
 
-	row2 := []byte{0x81, 0x00}
-	qdcount := []byte{0x01}
-	ancount := []byte{0x00}
-	nscount := []byte{0x00}
-	arcount := []byte{0x00}
+	row2 := []byte{0x01, 0x00}
+	qdcount := []byte{0x00, 0x01}
+	ancount := []byte{0x00, 0x00}
+	nscount := []byte{0x00, 0x00}
+	arcount := []byte{0x00, 0x00}
 
 	header = []byte{}
 	headerComponents := [][]byte{id, row2, qdcount, ancount, nscount, arcount}
@@ -41,4 +40,30 @@ func generateQueryHeader() (id []byte, header []byte) {
 	}
 
 	return id, header
+}
+
+func generateQuery(name []byte) []byte {
+	qname := generateQueryName(name)
+	qtype := []byte{0x00, 0x01}
+	qclass := []byte{0x00, 0x01}
+
+	all := [][]byte{qname, []byte{0x00}, qtype, qclass}
+	ret := []byte{}
+	for _, elt := range all {
+		ret = append(ret, elt...)
+	}
+
+	return ret
+}
+
+func generateQueryName(name []byte) []byte {
+	splat := bytes.Split(name, []byte{'.'})
+	ret := []byte{}
+
+	for _, field := range splat {
+		ret = append(ret, []byte{uint8(len(field))}...)
+		ret = append(ret, field...)
+	}
+
+	return ret
 }
