@@ -34,11 +34,15 @@ func NametoQuery(name []byte) ([]byte, []byte) {
 	nscount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	arcount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
-	header := append(id, qr, opcode, aa, tc, rd, ra, z, rcode, qdcount, ancount, nscount, arcount...)
+	header := []byte{}
+	headerComponents := [][]byte{id, qr, opcode, aa, tc, rd, ra, z, rcode, qdcount, ancount, nscount, arcount}
+	for _, elt := range headerComponents {
+		header = append(header, elt...)
+	}
 
 	qlength := uint8(len(name))
 
-	message := append(header, qlength, name...)
+	message := append(append(header, qlength), name...)
 
 	return id, message
 }
