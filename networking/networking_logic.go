@@ -1,25 +1,22 @@
 package networking
 
 import (
-	//"../dns_messages" // uncomment when ready
+	"../dns_messages" // uncomment when ready
 	"net"
 )
 
-func connect(dns_server string) {
-	ServerAddr, err := net.ResolveUDPAddr("udp", dns_server)
-	if err != nil {
-		return nil, err
-	}
+func SendQuery(msg dns_messages.Message, dns_server string) (response []byte, numBytes int, err interface{}) {
+	serverAddr, err := net.ResolveUDPAddr("udp", dns_server)
+	localAddr, err := net.ResolveUDPAddr("udp", "127.0.0.1:0")
+	conn, err := net.DialUDP("udp", localAddr, serverAddr)
 
-	LocalAddr, err := net.ResolveUDPAddr("udp", "127.0.0.1:0")
-	if err != nil {
-		return nil, err
-	}
+	defer conn.Close()
 
-	Conn, err := net.DialUDP("udp", LocalAddr, ServerAddr)
-	if err != nil {
-		return nil, err
-	}
+	conn.Write(msg.ToByteSlice())
+	//var response []byte
+	numBytes, _, err = conn.ReadFromUDP(response)
 
-	return conn, nil
+	err = nil
+
+	return response, numBytes, err
 }
