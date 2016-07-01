@@ -13,7 +13,6 @@ func SendQuery(msg dns_messages.Message, dns_server string) (response []byte, nu
 	defer conn.Close()
 
 	conn.Write(msg.ToByteSlice())
-	//var response []byte
 	numBytes, _, err = conn.ReadFromUDP(response)
 
 	err = nil
