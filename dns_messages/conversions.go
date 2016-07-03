@@ -5,32 +5,8 @@ import (
 	"time"
 )
 
-func NametoQuery(name []byte) ([]byte, Message) {
-	src := rand.NewSource(time.Now().UnixNano())
-	gen := rand.New(src)
-
-	var id []byte
-	id = make([]byte, 4)
-	gen.Read(id)
-
-	qr := []byte{1}
-	opcode := []byte{0, 0, 0, 0}
-	aa := []byte{0}
-	tc := []byte{0}
-	rd := []byte{1}
-	ra := []byte{0}
-	z := []byte{0, 0, 0}
-	rcode := []byte{0, 0, 0, 0}
-	qdcount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
-	ancount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	nscount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	arcount := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-
-	header := []byte{}
-	headerComponents := [][]byte{id, qr, opcode, aa, tc, rd, ra, z, rcode, qdcount, ancount, nscount, arcount}
-	for _, elt := range headerComponents {
-		header = append(header, elt...)
-	}
+func NametoQuery(name []byte) (id []byte, msg Message) {
+	id, header := generateQueryHeader()
 
 	qlength := uint8(len(name))
 
@@ -39,7 +15,30 @@ func NametoQuery(name []byte) ([]byte, Message) {
 		question:   append(append([]byte{}, qlength), name...),
 		answers:    []byte{},
 		authority:  []byte{},
-		additional: []byte{}}
+		additional: []byte{},
+	}
 
 	return id, message
+}
+
+func generateQueryHeader() (id []byte, header []byte) {
+	src := rand.NewSource(time.Now().UnixNano())
+	gen := rand.New(src)
+
+	id = make([]byte, 2)
+	gen.Read(id)
+
+	row2 := []byte{0x81, 0x00}
+	qdcount := []byte{0x01}
+	ancount := []byte{0x00}
+	nscount := []byte{0x00}
+	arcount := []byte{0x00}
+
+	header = []byte{}
+	headerComponents := [][]byte{id, row2, qdcount, ancount, nscount, arcount}
+	for _, elt := range headerComponents {
+		header = append(header, elt...)
+	}
+
+	return id, header
 }
