@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	_, query := dns_messages.NametoQuery([]byte("www.google.com"))
+	id, query := dns_messages.NametoQuery([]byte("www.google.com"))
 	fmt.Println("QUERY: ")
-	fmt.Println(query)
+	fmt.Println(id, query)
 
 	fmt.Println("CONVERTED QUERY: ")
 	fmt.Println(query.ToByteSlice())
