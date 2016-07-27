@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Generate a query based on a domain name (e.g. "google.com")
 func NametoQuery(name []byte) (id []byte, msg Message) {
 	id, header := generateQueryHeader()
 

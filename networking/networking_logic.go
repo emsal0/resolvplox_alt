@@ -2,10 +2,10 @@ package networking
 
 import (
 	"../dns_messages" // uncomment when ready
-	//"fmt"
 	"net"
 )
 
+// Sends a DNS Message to the desired server (only port 53 supported right now)
 func SendQuery(msg dns_messages.Message, dns_server string) (response []byte, numBytes int, err error) {
 	serverAddr, err := net.ResolveUDPAddr("udp", dns_server+":53")
 	if err != nil {
