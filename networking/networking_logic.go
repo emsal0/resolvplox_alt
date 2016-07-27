@@ -1,7 +1,7 @@
 package networking
 
 import (
-	"../dns_messages" // uncomment when ready
+	"github.com/emsal1863/resolvplox_alt/dns_messages" // uncomment when ready
 	"net"
 )
 

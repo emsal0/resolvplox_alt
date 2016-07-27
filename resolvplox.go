@@ -1,9 +1,9 @@
 package main
 
 import (
-	"./dns_messages"
-	"./networking"
 	"fmt"
+	"github.com/emsal1863/resolvplox_alt/dns_messages"
+	"github.com/emsal1863/resolvplox_alt/networking"
 )
 
 func main() {
