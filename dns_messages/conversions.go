@@ -11,11 +11,11 @@ func NametoQuery(name []byte) (id []byte, msg Message) {
 	id, header := generateQueryHeader()
 
 	message := Message{
-		head:       header,
-		question:   generateQuery(name),
-		answers:    []byte{},
-		authority:  []byte{},
-		additional: []byte{},
+		Head:       header,
+		Question:   generateQuery(name),
+		Answers:    []byte{},
+		Authority:  []byte{},
+		Additional: []byte{},
 	}
 
 	return id, message
