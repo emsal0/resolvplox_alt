@@ -42,3 +42,25 @@ func TestToByteSlice(t *testing.T) {
 		t.Error("ToByteSlice didn't append all fields in message struct together. Converted: " + string(msgConverted) + ", Expected: abcde")
 	}
 }
+
+func TestNametoQuery(t *testing.T) {
+    id, msg := dns_messages.NametoQuery([]byte("www.google.com"))
+    expectedQueryAfterId := []byte{
+        0x01, 0x00,
+        0x00, 0x01,
+        0x00, 0x00,
+        0x00, 0x00,
+        0x00, 0x00,
+        3, 'w', 'w', 'w',
+        6, 'g', 'o', 'o', 'g', 'l', 'e',
+        3, 'c', 'o', 'm',
+        0x00,
+        0x00, 0x01, // qtype
+        0x00, 0x01, // qclass
+    }
+    expectedQuery := append(id, expectedQueryAfterId...)
+
+    if !testEq(msg.ToByteSlice(), expectedQuery) {
+        t.Error("NameToQuery didn't construct expected query for www.google.com")
+    }
+}
