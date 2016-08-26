@@ -12,7 +12,7 @@ func NametoQuery(name []byte) (id []byte, msg Message) {
 
 	message := Message{
 		Head:       header,
-		Question:   generateQuery(name),
+		Questions:  []Question{NameToQuestion(name)},
 		Answers:    []byte{},
 		Authority:  []byte{},
 		Additional: []byte{},
