@@ -69,3 +69,12 @@ func TestNametoQuery(t *testing.T) {
 		t.Error("NameToQuery didn't construct expected query for www.google.com")
 	}
 }
+
+func TestExtractName(t *testing.T) {
+	_, msg := dns_messages.NametoQuery([]byte("www.google.com"))
+	actual, _, _ := msg.ExtractNameFromQuery()
+	if !testEq(actual, []byte("www.google.com")) {
+		t.Log(string(actual))
+		t.Error("should have extracted google.com")
+	}
+}
