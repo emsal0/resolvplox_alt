@@ -90,3 +90,27 @@ func FromByteSlice(byteQuery []byte) (msg Message, err error) {
 		Questions: questions,
 	}, nil
 }
+
+func (msg *Message) ExtractNameFromQuery() (origN []byte, queryN []byte, err error) {
+	if len(msg.Questions) > 0 {
+		queryN = msg.Questions[0].Name
+	} else {
+		return []byte{}, []byte{}, errors.New("need at least one query for this function ExtractNameFromQuery")
+	}
+
+	index := 1
+	curLen := int(queryN[0])
+	origN = []byte{}
+	for index < len(queryN) {
+		for i := 0; i < curLen; i++ {
+			origN = append(origN, queryN[index])
+			index++
+		}
+		curLen = int(queryN[index])
+		origN = append(origN, '.')
+		index++
+	}
+	origN = origN[:len(origN)-1]
+
+	return origN, queryN, nil
+}
