@@ -25,7 +25,7 @@ func FromFile(filename string) (config Config, err error) {
 		Default:   "",
 	}
 
-	matcher, err := regexp.Compile(`^([\w|\*|\.]+)\s+([\w|\.]+)$`)
+	matcher, err := regexp.Compile(`([\w|\*|\.]+)\s+([\w|\.]+)`)
 	if err != nil {
 		return ret, err
 	}
