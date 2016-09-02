@@ -33,7 +33,10 @@ func getResponse(conn *net.UDPConn, config config_reader.Config, msg_chan chan [
 			continue
 		}
 
-		response, _, _ := networking.SendQuery(msg, config.GetServer(string(name)))
+		response, _, err := networking.SendQuery(msg, config.GetServer(string(name)))
+		if err != nil {
+			fmt.Println(err)
+		}
 		conn.WriteTo(response, addr)
 	}
 }
