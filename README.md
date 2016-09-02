@@ -9,3 +9,10 @@ Configuration is defined in what are called "plox configs", which are files that
 * the default DNS server for all domains not specified in the current plox config must be defined, with the domain name `*`. 
 
     Example: ```* 8.8.8.4```
+
+An example complete valid plox config, called `simpleconfig.plox`:
+
+```
+twitter.com 8.8.8.8
+* 8.8.8.4
+```
