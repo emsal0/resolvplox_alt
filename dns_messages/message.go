@@ -73,10 +73,11 @@ func FromByteSlice(byteQuery []byte) (msg Message, err error) {
 		curQ := Question{}
 		for byteQuery[curPos] != 0x00 {
 			segmentLength := byteQuery[curPos]
-			curQ.Name = byteQuery[curPos+1 : segmentLength]
+			curQ.Name = append(curQ.Name, byteQuery[curPos:curPos+int(segmentLength)+1]...)
 
 			curPos += (int(segmentLength) + 1)
 		}
+		curQ.Name = append(curQ.Name, 0x00)
 		curPos++
 		curQ.Type = byteQuery[curPos : curPos+2]
 		curQ.Class = byteQuery[curPos+2 : curPos+4]
@@ -101,13 +102,11 @@ func (msg *Message) ExtractNameFromQuery() (origN []byte, queryN []byte, err err
 	index := 1
 	curLen := int(queryN[0])
 	origN = []byte{}
-	for index < len(queryN) {
-		for i := 0; i < curLen; i++ {
-			origN = append(origN, queryN[index])
-			index++
-		}
-		curLen = int(queryN[index])
+	for curLen != 0 {
+		origN = append(origN, queryN[index:index+curLen]...)
 		origN = append(origN, '.')
+		index += curLen
+		curLen = int(queryN[index])
 		index++
 	}
 	origN = origN[:len(origN)-1]

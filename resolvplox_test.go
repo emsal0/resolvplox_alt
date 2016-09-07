@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// THIS TEST WILL ONLY PASS IF THE APP IS CURRENTLY RUNNING
 func TestResolvploxServer(t *testing.T) {
 	testQuery := []byte{
 		0x04, 0x9a,
