@@ -41,5 +41,4 @@ This starts up a UDP server on localhost port 20841. Set your DNS settings in yo
 Some things need to be done:
 
 * rename to resolvplox instead of resolvplox_alt (the original resolvplox was an Erlang project that isn't finished and probably won't be in the forseeable future)
-* Support DHCP DNS servers
-
+* Support the use of the "default" DNS servers given by the ISP via DHCP
