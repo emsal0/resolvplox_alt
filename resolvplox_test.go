@@ -7,6 +7,7 @@ import (
 
 // THIS TEST WILL ONLY PASS IF THE APP IS CURRENTLY RUNNING
 func TestResolvploxServer(t *testing.T) {
+	t.Log("starting test")
 	testQuery := []byte{
 		0x04, 0x9a,
 		0x01, 0x00,
@@ -22,7 +23,12 @@ func TestResolvploxServer(t *testing.T) {
 		0x00, 0x01, // qclass
 	}
 
+	t.Log("Connecting to resolvplox instance...")
 	remote_addr, err := net.ResolveUDPAddr("udp", "127.0.0.1:20841")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log("Binding...")
 	local_addr, err := net.ResolveUDPAddr("udp", "0.0.0.0:0")
 	if err != nil {
 		t.Error(err)
