@@ -2,6 +2,7 @@ package networking
 
 import (
 	"errors"
+	"fmt"
 	"github.com/emsal1863/resolvplox_alt/dns_messages"
 	"net"
 	"strconv"
@@ -65,6 +66,8 @@ func SendQuery(msg dns_messages.Message, dns_server string) (response []byte, nu
 	response = make([]byte, 1024)
 	conn.Write(msg.ToByteSlice())
 	numBytes, _, err = conn.ReadFromUDP(response)
+	fmt.Println(numBytes)
+	response = response[:numBytes]
 
 	err = nil
 	conn.Close()

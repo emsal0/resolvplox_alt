@@ -35,10 +35,11 @@ func TestResolvploxServer(t *testing.T) {
 	response := make([]byte, 1024)
 	conn.Write(testQuery)
 
-	_, _, err = conn.ReadFromUDP(response)
+	numBytes, _, err := conn.ReadFromUDP(response)
 	if err != nil {
 		t.Error(err)
 	}
+	response = response[:numBytes]
 
 	t.Log(response)
 }
